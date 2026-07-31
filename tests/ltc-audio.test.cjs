@@ -87,7 +87,7 @@ test('holds playback when canonical timing is unavailable instead of coercing nu
 });
 
 test('waits for pending audio activation before restoring on stop', async () => {
-  const output = new LtcDemoOutput();
+  const output = new LtcDemoOutput({platform: 'darwin'});
   const calls = [];
   let active = false;
   let releaseActivation;
@@ -144,7 +144,7 @@ test('applies delay compensation only inside the LTC output', async () => {
 });
 
 test('keeps audio route state retryable when restoration fails', async () => {
-  const output = new LtcDemoOutput();
+  const output = new LtcDemoOutput({platform: 'darwin'});
   let active = true;
   let restoreCalls = 0;
   output.audioRoute = {
@@ -170,9 +170,28 @@ test('keeps audio route state retryable when restoration fails', async () => {
 });
 
 test('resolves packaged Swift helper outside app.asar', () => {
-  const dirname = '/Applications/PRO DJ LINK Monitor.app/Contents/Resources/app.asar/src/prolink';
+  const dirname = path.join(
+    path.sep,
+    'Applications',
+    'PRO DJ LINK Monitor.app',
+    'Contents',
+    'Resources',
+    'app.asar',
+    'src',
+    'prolink'
+  );
   assert.equal(
     resolveMacAudioHelperPath(dirname),
-    '/Applications/PRO DJ LINK Monitor.app/Contents/Resources/app.asar.unpacked/src/prolink/macAudioDevice.swift'
+    path.join(
+      path.sep,
+      'Applications',
+      'PRO DJ LINK Monitor.app',
+      'Contents',
+      'Resources',
+      'app.asar.unpacked',
+      'src',
+      'prolink',
+      'macAudioDevice.swift'
+    )
   );
 });

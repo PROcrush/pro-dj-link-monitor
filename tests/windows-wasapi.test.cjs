@@ -9,16 +9,28 @@ const {resolveWindowsAudioHelperPath} = require('../src/prolink/windowsAudioHelp
 const {WindowsWasapiLtcSink} = require('../src/prolink/windowsWasapiLtcSink.cjs');
 
 test('resolves development and packaged Windows helper paths by architecture', () => {
+  const developmentDir = path.join(path.sep, 'workspace', 'src', 'prolink');
+  const packagedDir = path.join(path.sep, 'workspace', 'resources', 'app.asar', 'src', 'prolink');
   assert.equal(
-    resolveWindowsAudioHelperPath('/workspace/src/prolink', 'x64', {}),
-    '/workspace/src/windows-audio-helper/bin/x64/prodjlink-wasapi-ltc.exe'
+    resolveWindowsAudioHelperPath(developmentDir, 'x64', {}),
+    path.join(path.sep, 'workspace', 'src', 'windows-audio-helper', 'bin', 'x64', 'prodjlink-wasapi-ltc.exe')
   );
   assert.equal(
-    resolveWindowsAudioHelperPath('/workspace/resources/app.asar/src/prolink', 'arm64', {}),
-    '/workspace/resources/app.asar.unpacked/src/windows-audio-helper/bin/arm64/prodjlink-wasapi-ltc.exe'
+    resolveWindowsAudioHelperPath(packagedDir, 'arm64', {}),
+    path.join(
+      path.sep,
+      'workspace',
+      'resources',
+      'app.asar.unpacked',
+      'src',
+      'windows-audio-helper',
+      'bin',
+      'arm64',
+      'prodjlink-wasapi-ltc.exe'
+    )
   );
   assert.equal(
-    resolveWindowsAudioHelperPath('/workspace/src/prolink', 'x64', {PRODJLINK_WASAPI_HELPER: 'C:\\Tools\\ltc.exe'}),
+    resolveWindowsAudioHelperPath(developmentDir, 'x64', {PRODJLINK_WASAPI_HELPER: 'C:\\Tools\\ltc.exe'}),
     'C:\\Tools\\ltc.exe'
   );
 });
