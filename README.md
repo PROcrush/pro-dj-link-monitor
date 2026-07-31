@@ -10,8 +10,21 @@ timecode-oriented VJ workflows on PRO DJ LINK networks.
 > AlphaTheta Corporation, Pioneer Corporation/Pioneer DJ, TC Supply or
 > Resolume B.V.
 
-The project is currently source-first. Signed and notarized public binaries
-have not been released yet.
+The project is source-first. Unsigned preview binaries are available from the
+[v1.4.4 prerelease](https://github.com/PROcrush/pro-dj-link-monitor/releases/tag/v1.4.4);
+signed and notarized binaries have not been released yet.
+
+## Downloads
+
+| Platform | Package | Architecture |
+| --- | --- | --- |
+| macOS | DMG or ZIP | Apple Silicon (`arm64`) |
+| Windows | NSIS installer or portable EXE | x64 |
+
+The v1.4.4 files are an **unsigned preview release**. macOS Gatekeeper and
+Windows SmartScreen may show an unidentified-publisher warning. Verify the
+download against the release's `SHA256SUMS.txt` before opening it. Intel macOS
+and Windows ARM64 packages are not part of this release.
 
 ## What it does
 

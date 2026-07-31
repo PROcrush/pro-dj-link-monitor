@@ -2,8 +2,9 @@
 
 ## Supported code
 
-Security fixes are applied to the current `main` branch. Until signed releases
-exist, source builds should be treated as development software.
+Security fixes are applied to the current `main` branch. The v1.4.4 binary
+release is an unsigned preview: verify its published SHA-256 checksums and treat
+it as development software until signed releases exist.
 
 ## Reporting a vulnerability
 
