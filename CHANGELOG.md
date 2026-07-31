@@ -10,8 +10,9 @@ Versioning where practical.
 
 - Added complete English and Simplified Chinese README entry points.
 - Documented that CDJ-3000X and CDJ-1500X are untested with unknown
-  compatibility, and recommended no more than three physical CDJs while the
-  Virtual CDJ compatibility layer is active.
+  compatibility. Documented a strict three-player maximum for models earlier
+  than CDJ-3000 and a five-player maximum for CDJ-3000 and later generations
+  while the Virtual CDJ compatibility layer is active.
 
 ## [1.4.4] - 2026-08-01
 

@@ -29,9 +29,9 @@ download against the release's `SHA256SUMS.txt` before opening it. Intel macOS
 and Windows ARM64 packages are not part of this release.
 
 > **Compatibility notice:** CDJ-3000X and CDJ-1500X have not been tested with
-> this project, so compatibility is currently unknown. Because the monitor's
-> compatibility layer announces a Virtual CDJ identity on the network, we
-> recommend using no more than three physical CDJs while the monitor is active.
+> this project, so compatibility is currently unknown. While the monitor is
+> active, models earlier than CDJ-3000 are strictly limited to three physical
+> CDJs; CDJ-3000 and later generations can use up to five physical CDJs.
 
 ## What it does
 
@@ -98,14 +98,18 @@ player, the correct Virtual CDJ interface and accessible DBServer data.
 
 - **CDJ-3000X:** not tested; compatibility is unknown.
 - **CDJ-1500X:** not tested; compatibility is unknown.
+- **Models earlier than CDJ-3000:** strict maximum of three physical CDJs
+  alongside the monitor.
+- **CDJ-3000 and later generations:** maximum of five physical CDJs alongside
+  the monitor.
 - Player firmware, mixer/network topology and device-number allocation can all
   affect interoperability. Test the exact show setup away from production.
 
 The monitor's Virtual CDJ compatibility layer announces a logical player
-identity so compatible equipment can return metadata and waveform data. For
-the current preview release, the operational recommendation is **no more than
-three physical CDJs while the monitor is active**. This is stability guidance,
-not a certified protocol limit.
+identity so compatible equipment can return metadata and waveform data. The
+device-count limits above account for that virtual identity. The five-player
+capacity guidance for the CDJ-3000 generation and later does not confirm
+compatibility for individually untested models such as CDJ-3000X or CDJ-1500X.
 
 ## Develop from source
 
