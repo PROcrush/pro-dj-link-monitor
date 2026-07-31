@@ -1,0 +1,203 @@
+# PRO DJ LINK Monitor — Unofficial
+
+[![CI](https://github.com/PROcrush/pro-dj-link-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/PROcrush/pro-dj-link-monitor/actions/workflows/ci.yml)
+
+An open-source macOS and Windows monitor for DJ playback state, waveforms and
+timecode-oriented VJ workflows on PRO DJ LINK networks.
+
+> This is an independent, unofficial interoperability project. It is not
+> affiliated with, endorsed by, sponsored by, licensed by or certified by
+> AlphaTheta Corporation, Pioneer Corporation/Pioneer DJ, TC Supply or
+> Resolume B.V.
+
+The project is currently source-first. Signed and notarized public binaries
+have not been released yet.
+
+## What it does
+
+- Monitors PRO DJ LINK device announcements, beat/status packets and DBServer
+  metadata visible on the selected local network.
+- Displays up to four decks with title, artist, BPM, playback state, timing,
+  artwork, waveform, beat grid and cue information when available.
+- Publishes canonical deck state through local WebSocket and optional OSC.
+- Provides a trusted-LAN web viewer when the user explicitly enables it.
+- Supports Resolume-oriented BPM/downbeat output and experimental TCNet
+  capture/research workflows.
+- Generates continuous LTC audio. Windows uses a native WASAPI helper for a
+  selected render endpoint such as VB-CABLE; macOS can use an installed
+  virtual-audio device.
+
+Missing or stale timing remains unavailable. The application never converts a
+missing timing source into a false `00:00:00:00` value.
+
+## Safety model
+
+The monitor does **not** send CDJ load, play, pause, master, sync or track
+control commands.
+
+The application is not completely silent on the network:
+
+- Its Virtual CDJ compatibility probe announces a local presence so compatible
+  players can return metadata and waveform data.
+- Optional OSC, Arena, TCNet and LTC outputs transmit only when enabled.
+- Raw TCNet capture records observed packets for diagnostics.
+
+Use it on an isolated, trusted DJ/show-control network and test changes away
+from a live production first.
+
+## 中文快速开始
+
+1. 把电脑、CDJ/DJM 接到同一个有线局域网交换机。
+2. 安装依赖并启动：
+
+   ```sh
+   npm ci
+   npm start
+   ```
+
+3. 在应用里选择连接 DJ 设备的有线 IPv4 网卡，然后开始监看。
+4. macOS 首次运行时允许“本地网络”访问；Windows 弹出防火墙提示时只允许可信专用网络。
+5. 默认 Web/WS 仅本机可访问。只有需要手机或另一台电脑监看时，才在高级设置里显式开启“可信 LAN”。
+
+看到 Deck 连接状态、BPM 和实时播放信息即表示基础监听成功。曲名、波形或 cue
+需要兼容播放器、正确的 Virtual CDJ 网卡，以及可访问的 DBServer 数据。
+
+## Requirements
+
+- Node.js 22.12 or newer for development.
+- macOS or Windows. Linux is not currently supported.
+- A wired IPv4 interface on the same trusted LAN as the DJ equipment.
+- Optional Resolume Arena, BlackHole or VB-CABLE installations are provided
+  and licensed separately by their vendors.
+
+## Develop from source
+
+```sh
+npm ci
+npm test
+npm start
+```
+
+The test suite is fixture-driven and does not require physical DJ hardware.
+Native endpoint routing and actual LTC lock still require platform and hardware
+smoke tests.
+
+## Network surfaces
+
+| Surface | Default | Bind/destination | Notes |
+| --- | --- | --- | --- |
+| PRO DJ LINK UDP | listening while monitor runs | selected local interface | Ports 50000, 50001, 50002 and 50004 |
+| TCNet UDP capture | listening while monitor runs | local interfaces | Ports 60000, 60001, 60002, 65023 and 65024 |
+| WebSocket | enabled | `127.0.0.1:7071` | Local JSON state output |
+| Web Console | enabled | `127.0.0.1:7072` | LAN binding requires explicit trusted-LAN opt-in |
+| OSC | disabled | `127.0.0.1:9000` | User-configurable destination |
+| Arena Web API | disabled | `127.0.0.1:8080` | BPM/downbeat fallback; no continuous clip scrubbing by default |
+| Audio LTC | disabled | selected audio endpoint | Virtual/physical routing must be explicitly configured |
+
+The trusted-LAN Web Console does not provide account authentication or TLS.
+Never forward ports 7071/7072 to the public internet or use them on an
+untrusted Wi-Fi/VLAN. See [SECURITY.md](SECURITY.md).
+
+## Timing and outputs
+
+Deck timing is computed once and shared by the desktop UI, LAN viewer, OSC,
+Arena and LTC outputs. Absolute-position packets are preferred when fresh;
+beat-grid timing can provide a fallback. Paused decks hold their last valid
+anchor instead of continuing to drift.
+
+Useful OSC fields include:
+
+- `/vj/deck/{deck}/timingValid`
+- `/vj/deck/{deck}/timecode`
+- `/vj/deck/{deck}/timecode/frame`
+- `/vj/arena/sourceDeck`
+- `/vj/arena/timingValid`
+- `/vj/arena/timecode`
+- `/vj/arena/elapsed`
+- `/vj/arena/progress`
+
+`LTC delay compensation` applies only to generated LTC audio and never shifts
+canonical deck, OSC or TCNet time.
+
+## Build applications
+
+macOS Apple Silicon:
+
+```sh
+npm run package:mac
+```
+
+macOS Intel:
+
+```sh
+npm run package:mac:x64
+```
+
+Public macOS distribution requires Developer ID signing and notarization. The
+macOS LTC helper is compiled with `/usr/bin/swift`, so Xcode Command Line Tools
+are required for that development path.
+
+Windows x64 builds must run in a native Windows 10/11 environment with Visual
+Studio 2022 Build Tools (Desktop development with C++) and CMake:
+
+```bat
+npm run package:win
+```
+
+The prepackage step builds the matching WASAPI helper. Windows ARM64 scripts
+exist but remain experimental until validated on real ARM64 hardware. See
+[`src/windows-audio-helper/README.md`](src/windows-audio-helper/README.md).
+
+The NSIS installer/portable outer stub may be reported as 32-bit even though
+the packaged Electron application and helper are x86-64.
+
+## Repository layout
+
+```text
+src/main.cjs                    Electron main process
+src/renderer/                   Desktop UI
+src/prolink/                    Protocol, timing and output modules
+src/windows-audio-helper/       Native WASAPI LTC helper source
+tests/                          Main regression suite
+labs/timecode-consistency/      Isolated timing/capture experiments
+labs/ltc-audio-timecode/        LTC rendering and routing experiments
+docs/                           Publish-safe architecture/research notes
+```
+
+Generated packages, native binaries, WAV files and live packet captures are
+intentionally excluded from Git. Clone optional BlackHole source separately
+from its official repository when running the macOS driver lab.
+
+## Capture and diagnostic privacy
+
+TCNet and PRO DJ LINK captures may contain timestamps, private IP addresses,
+device models and track metadata. Do not attach a live capture to a public
+issue. Create a small synthetic fixture or sanitize every identifying field.
+
+Automatic waveform failure logs are reduced before being persisted to disk.
+An explicit user export can contain more detail and must be reviewed before
+sharing.
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a change. The project
+keeps a strict no-CDJ-control safety boundary and requires tests for protocol,
+timing and output lifecycle changes.
+
+## Acknowledgements
+
+Protocol interoperability work builds on public research by the Deep Symmetry
+community and related open-source projects. See
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for source, license and
+attribution details.
+
+## License
+
+Original project code is available under the MIT License. The separately
+identified `src/prolink/virtualCdj.cjs` file is distributed under EPL-2.0
+because its startup templates and logic are adapted from Deep Symmetry's
+beat-link project. See [LICENSE](LICENSE),
+[LICENSES/EPL-2.0.txt](LICENSES/EPL-2.0.txt) and
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+All product names and trademarks belong to their respective owners.

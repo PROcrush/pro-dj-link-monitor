@@ -1,0 +1,47 @@
+# OS and editor metadata
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.npmrc
+
+# Dependencies and package output
+node_modules/
+dist/
+release/
+*.dmg
+*.exe
+*.msi
+*.pdb
+*.zip
+*.blockmap
+builder-debug.yml
+builder-effective-config.yaml
+
+# Native build output
+src/windows-audio-helper/build/
+src/windows-audio-helper/bin/
+
+# Generated research output and private captures
+labs/ltc-audio-timecode/out/
+labs/timecode-consistency/captures/
+waveform-failures*.jsonl
+arena-tcnet-capture*.jsonl
+pro-dj-link-snapshot*.json
+*.log
+
+# Optional third-party checkout; obtain it from the upstream project.
+labs/BlackHole/
+
+# Local research notes derived from proprietary installed documentation.
+docs/showkontrol-user-manual-study.md
+docs/arena-pioneer-tcnet-research.md
+
+# Superseded local prototypes. Runtime code lives under src/prolink/.
+/bridge.cjs
+/monitor.cjs

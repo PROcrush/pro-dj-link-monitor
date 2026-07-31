@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PRO DJ LINK 实时监看</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="view-monitor">
+    <div class="app-shell">
+      <header class="top-bar">
+        <div class="brand-block">
+          <span class="brand-mark">PDL</span>
+          <div>
+            <p>PRO DJ LINK</p>
+            <h1>实时监看</h1>
+          </div>
+        </div>
+
+        <div id="masterWatch" class="master-watch">
+          <span>主控状态</span>
+          <strong>等待 MASTER</strong>
+        </div>
+
+        <div class="control-strip">
+          <select id="interfaceSelect"></select>
+          <select id="layoutSelect" class="layout-select">
+            <option value="auto">自动布局</option>
+            <option value="left-right">左右布局</option>
+            <option value="top-bottom">上下布局</option>
+          </select>
+          <select id="waveformModeSelect" class="waveform-mode-select">
+            <option value="auto">自动波形</option>
+            <option value="three-band">3Band</option>
+            <option value="rgb">RGB</option>
+            <option value="blue">Blue</option>
+          </select>
+          <select id="waveformViewSelect" class="waveform-view-select">
+            <option value="overview">总览</option>
+            <option value="follow">跟随</option>
+          </select>
+        </div>
+
+        <div class="transport-strip">
+          <span id="statusPill" class="status-pill idle">未监听</span>
+          <button id="startButton" class="primary-button" type="button">开始</button>
+          <button id="forceRefreshButton" class="tool-button" type="button" title="重新读取当前曲目的曲库、波形、Cue 和 Beatgrid">刷新</button>
+          <button id="stopButton" class="tool-button" type="button">停止</button>
+          <button id="advancedNavButton" class="tool-button settings-button" type="button">高级</button>
+        </div>
+      </header>
+
+      <div class="web-address-bar">
+        <span>Web Console</span>
+        <strong id="webAddressText">http://127.0.0.1:7072/</strong>
+      </div>
+
+      <div class="content-views">
+        <main class="monitor-surface">
+          <section id="deckGrid" class="deck-grid"></section>
+        </main>
+
+        <section id="advancedPage" class="advanced-page" aria-label="高级控制">
+          <div class="advanced-head">
+            <div>
+              <p>PRO DJ LINK SETUP</p>
+              <h2>高级控制</h2>
+            </div>
+            <button id="monitorNavButton" class="tool-button" type="button">返回监看</button>
+          </div>
+
+          <div class="advanced-grid">
+            <section class="advanced-panel">
+              <div class="panel-title">
+                <span>Network</span>
+                <strong>网络 / Web</strong>
+              </div>
+              <div class="settings-row">
+                <span>Web Console</span>
+                <label class="web-pill" title="Web Console 监看端口；默认仅本机浏览器可访问">
+                  <span>WEB</span>
+                  <input id="webConsolePort" class="web-port" type="number" min="1024" max="65535" value="7072" />
+                </label>
+              </div>
+              <div class="settings-row">
+                <span>可信局域网</span>
+                <label class="toggle-pill" title="仅在可信网络开启；开启后同一局域网设备可访问 Web Console">
+                  <input id="webConsoleLanToggle" type="checkbox" />
+                  <span>允许 LAN 访问</span>
+                </label>
+              </div>
+            </section>
+
+            <section class="advanced-panel">
+              <div class="panel-title">
+                <span>Waveform</span>
+                <strong>波形显示</strong>
+              </div>
+              <label class="range-pill">
+                <span>波形高度</span>
+                <input id="waveformHeightScale" type="range" min="70" max="150" value="100" />
+              </label>
+              <label class="range-pill">
+                <span>波形亮度</span>
+                <input id="waveformBrightness" type="range" min="70" max="150" value="100" />
+              </label>
+            </section>
+
+            <section class="advanced-panel advanced-panel-wide">
+              <div class="panel-title">
+                <span>Output</span>
+                <strong>输出同步</strong>
+              </div>
+              <div class="settings-row">
+                <span>Pioneer</span>
+                <div class="pioneer-sync-control" title="当前根基路线：Virtual CDJ + PRO DJ LINK 被动读取；Bridge / TCNet 输出禁用">
+                  <select id="arenaPioneerMode" class="pioneer-sync-select" disabled>
+                    <option value="off">Virtual CDJ</option>
+                  </select>
+                  <button id="officialBridgeButton" class="tool-button" type="button" disabled hidden>Bridge 禁用</button>
+                  <span id="officialBridgeStatus" class="bridge-status ready">Bridge / TCNet 禁用</span>
+                </div>
+              </div>
+              <div class="settings-row">
+                <span>TCNet 抓包</span>
+                <div class="capture-pill">
+                  <span id="tcnetCaptureStatus" class="capture-count">0 包</span>
+                  <button id="tcnetCaptureButton" class="tool-button" type="button" title="导出 Arena / PRO DJ LINK Bridge / ShowKontrol 的 TCNet 抓包 JSONL">导出抓包</button>
+                </div>
+              </div>
+              <div class="settings-row">
+                <span>OSC</span>
+                <label class="osc-pill">
+                  <input id="oscToggle" type="checkbox" />
+                  <span>OSC</span>
+                  <input id="oscHost" class="osc-host" type="text" value="127.0.0.1" />
+                  <input id="oscPort" class="osc-port" type="number" min="1" max="65535" value="9000" />
+                </label>
+              </div>
+              <div class="settings-row">
+                <span>Arena</span>
+                <button id="arenaConnectButton" class="arena-connect-button disconnected" type="button" title="连接 Resolume Arena Webserver">Arena 未连接</button>
+              </div>
+              <div class="settings-row">
+                <span>虚拟声卡</span>
+                <button id="virtualAudioStatus" class="virtual-audio-status" type="button" title="检测可用的虚拟音频输入/输出设备">检测中</button>
+              </div>
+              <div class="settings-row">
+                <span>时间码预检</span>
+                <div id="ltcPreflightStatus" class="ltc-preflight-status" title="等待虚拟声卡检测">等待检测</div>
+              </div>
+              <div class="settings-row">
+                <span>Output M</span>
+                <label class="ltc-demo-pill" title="把 Output M 的源 Deck 转成音频 LTC，通过虚拟声卡送给 Arena SMPTE 输入">
+                  <input id="ltcDemoToggle" type="checkbox" />
+                  <span>LTC</span>
+                  <select id="ltcSourceMode" class="ltc-source-select" title="Output M 时间码源">
+                    <option value="auto" selected>自动</option>
+                    <option value="deck-1">D1</option>
+                    <option value="deck-2">D2</option>
+                    <option value="deck-3">D3</option>
+                    <option value="deck-4">D4</option>
+                  </select>
+                  <input id="ltcManualRouteToggle" type="checkbox" title="手动路由：系统默认输出与 Arena Audio Input 已连接到同一虚拟声卡" />
+                  <span>手动</span>
+                  <input id="ltcDemoConfigureArena" type="checkbox" checked title="自动把目标 Clip 切到 SMPTE 输入并连接" />
+                  <span>SMPTE</span>
+                  <select id="ltcDemoSmpteInput" class="ltc-smpte-select" title="Arena SMPTE 输入">
+                    <option value="SMPTE 1">1</option>
+                    <option value="SMPTE 2" selected>2</option>
+                  </select>
+                  <input id="ltcDemoSeconds" class="ltc-seconds" type="number" min="5" max="600" value="60" title="每段 LTC 音频秒数" />
+                  <span>补偿</span>
+                  <input id="ltcOffsetMs" class="ltc-offset" type="number" min="-1000" max="1000" step="10" value="0" title="LTC 延迟补偿 ms：视频慢填正数，视频快填负数" />
+                  <span>ms</span>
+                  <span id="ltcDemoStatus" class="ltc-demo-status">待机</span>
+                </label>
+              </div>
+              <label class="arena-pill" title="通过 Resolume Webserver 8080，同步当前 MASTER / ON AIR / 正在播放 Deck 的 BPM 与拍点，不连续拖动素材播放头">
+                <input id="arenaTimecodeToggle" type="checkbox" />
+                <span>Arena BPM 备用</span>
+                <input id="arenaLayer" class="arena-number" type="number" min="1" max="999" value="1" title="Arena Layer" />
+                <input id="arenaClip" class="arena-number" type="number" min="1" max="999" value="1" title="Arena Clip" />
+                <select id="timecodeFps" class="timecode-fps" title="时间码帧率">
+                  <option value="25">25fps</option>
+                  <option value="24">24fps</option>
+                  <option value="30">30fps</option>
+                </select>
+              </label>
+            </section>
+          </div>
+
+          <input id="tcnetToggle" type="checkbox" checked hidden />
+          <input id="tcnetNodeToggle" type="checkbox" hidden />
+          <input id="virtualCdjToggle" type="checkbox" hidden />
+          <input id="virtualCdjId" class="hidden-input" type="number" min="1" max="15" value="7" />
+          <input id="tcnetUnicastPort" class="hidden-input" type="number" min="1024" max="65535" value="65024" />
+          <input id="websocketPort" class="hidden-input" type="number" min="1024" max="65535" value="7071" />
+          <input id="websocketToggle" type="checkbox" checked hidden />
+          <button id="waveformLogButton" class="tool-button hidden-input" type="button" title="导出每次波形加载失败的诊断日志">日志</button>
+          <button id="exportButton" class="tool-button hidden-input" type="button">导出</button>
+          <button id="clearLogButton" class="tool-button ghost hidden-input" type="button">清空</button>
+        </section>
+      </div>
+    </div>
+
+    <div class="sr-only">
+      <span id="interfaceAddress">全部 IPv4</span>
+      <span id="interfaceMac">-</span>
+      <span id="totalPackets">0</span>
+      <span id="validPackets">0</span>
+      <span id="invalidPackets">0</span>
+      <span id="count50000">0</span>
+      <span id="count50001">0</span>
+      <span id="count50002">0</span>
+      <span id="count50004">0</span>
+      <span id="count60000">0</span>
+      <span id="count60001">0</span>
+      <span id="count65024">0</span>
+      <span id="deviceCount">0</span>
+      <span id="statusCount">0</span>
+      <span id="mediaCount">0</span>
+      <span id="tcnetNodeCount">0</span>
+      <span id="layerCount">0</span>
+      <span id="wsClients">0</span>
+      <span id="masterDevice">-</span>
+      <span id="bridgeStatus">-</span>
+      <span id="waveformStatus">-</span>
+      <span id="deckClock">--:--:--</span>
+      <span id="timelineStrips"></span>
+      <span id="waveformGrid"></span>
+      <span id="layersTable"></span>
+      <span id="devicesTable"></span>
+      <span id="tcnetNodesTable"></span>
+      <span id="metadataTable"></span>
+      <span id="mediaTable"></span>
+      <span id="eventsTable"></span>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>

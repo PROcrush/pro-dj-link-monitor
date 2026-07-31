@@ -1,0 +1,95 @@
+{
+  "name": "pro-dj-link-monitor",
+  "version": "1.4.4",
+  "private": true,
+  "description": "Unofficial macOS and Windows monitor and VJ bridge for PRO DJ LINK, OSC, WebSocket and LTC workflows.",
+  "main": "src/main.cjs",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs labs/timecode-consistency/*.test.cjs labs/ltc-audio-timecode/*.test.cjs",
+    "package:mac": "electron-builder --mac dmg zip --arm64",
+    "package:mac:local": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dir --arm64",
+    "package:mac:x64": "electron-builder --mac dmg zip --x64",
+    "prepackage:win": "src\\windows-audio-helper\\build.cmd x64",
+    "package:win": "electron-builder --win nsis portable --x64",
+    "prepackage:win:arm64": "src\\windows-audio-helper\\build.cmd arm64",
+    "package:win:arm64": "electron-builder --win nsis portable --arm64",
+    "test:win-helper": "ctest --test-dir src/windows-audio-helper/build/x64 -C Release --output-on-failure",
+    "package": "electron-builder"
+  },
+  "keywords": [
+    "pioneer",
+    "alphatheta",
+    "pro-dj-link",
+    "cdj",
+    "djm",
+    "electron"
+  ],
+  "author": "PROcrush contributors",
+  "license": "MIT AND EPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PROcrush/pro-dj-link-monitor.git"
+  },
+  "homepage": "https://github.com/PROcrush/pro-dj-link-monitor#readme",
+  "bugs": {
+    "url": "https://github.com/PROcrush/pro-dj-link-monitor/issues"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "npm@11.9.0",
+  "devDependencies": {
+    "electron": "^42.5.1",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "io.github.procrush.prodjlinkmonitor",
+    "productName": "PRO DJ LINK Monitor",
+    "files": [
+      "src/main.cjs",
+      "src/preload.cjs",
+      "src/prolink/**/*",
+      "src/renderer/**/*",
+      "src/windows-audio-helper/bin/**/*.exe",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "src/prolink/macAudioDevice.swift",
+      "src/windows-audio-helper/bin/**/*.exe"
+    ],
+    "extraResources": [
+      {
+        "from": "LICENSE",
+        "to": "LICENSE"
+      },
+      {
+        "from": "LICENSES",
+        "to": "LICENSES"
+      },
+      {
+        "from": "THIRD_PARTY_NOTICES.md",
+        "to": "THIRD_PARTY_NOTICES.md"
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.music",
+      "extendInfo": {
+        "NSLocalNetworkUsageDescription": "Discover and monitor DJ devices on your selected local network."
+      }
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
+  },
+  "dependencies": {
+    "ws": "^8.21.0"
+  }
+}
