@@ -1,5 +1,7 @@
 # PRO DJ LINK Monitor — Unofficial
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 [![CI](https://github.com/PROcrush/pro-dj-link-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/PROcrush/pro-dj-link-monitor/actions/workflows/ci.yml)
 
 An open-source macOS and Windows monitor for DJ playback state, waveforms and
@@ -25,6 +27,11 @@ The v1.4.4 files are an **unsigned preview release**. macOS Gatekeeper and
 Windows SmartScreen may show an unidentified-publisher warning. Verify the
 download against the release's `SHA256SUMS.txt` before opening it. Intel macOS
 and Windows ARM64 packages are not part of this release.
+
+> **Compatibility notice:** CDJ-3000X and CDJ-1500X have not been tested with
+> this project, so compatibility is currently unknown. Because the monitor's
+> compatibility layer announces a Virtual CDJ identity on the network, we
+> recommend using no more than three physical CDJs while the monitor is active.
 
 ## What it does
 
@@ -58,22 +65,26 @@ The application is not completely silent on the network:
 Use it on an isolated, trusted DJ/show-control network and test changes away
 from a live production first.
 
-## 中文快速开始
+## Quick start
 
-1. 把电脑、CDJ/DJM 接到同一个有线局域网交换机。
-2. 安装依赖并启动：
+1. Connect the computer and CDJ/DJM equipment to the same wired LAN switch.
+2. Install dependencies and start the application:
 
    ```sh
    npm ci
    npm start
    ```
 
-3. 在应用里选择连接 DJ 设备的有线 IPv4 网卡，然后开始监看。
-4. macOS 首次运行时允许“本地网络”访问；Windows 弹出防火墙提示时只允许可信专用网络。
-5. 默认 Web/WS 仅本机可访问。只有需要手机或另一台电脑监看时，才在高级设置里显式开启“可信 LAN”。
+3. Select the wired IPv4 interface connected to the DJ equipment, then start
+   monitoring.
+4. On first launch, allow Local Network access on macOS. On Windows, allow the
+   firewall prompt only for trusted private networks.
+5. Web/WS access is local-only by default. Enable trusted-LAN access in Advanced
+   settings only when another trusted device needs the viewer.
 
-看到 Deck 连接状态、BPM 和实时播放信息即表示基础监听成功。曲名、波形或 cue
-需要兼容播放器、正确的 Virtual CDJ 网卡，以及可访问的 DBServer 数据。
+Connected deck state, BPM and live transport information confirm basic
+monitoring. Titles, waveforms and cues additionally require a compatible
+player, the correct Virtual CDJ interface and accessible DBServer data.
 
 ## Requirements
 
@@ -82,6 +93,19 @@ from a live production first.
 - A wired IPv4 interface on the same trusted LAN as the DJ equipment.
 - Optional Resolume Arena, BlackHole or VB-CABLE installations are provided
   and licensed separately by their vendors.
+
+## Device compatibility and deck-count guidance
+
+- **CDJ-3000X:** not tested; compatibility is unknown.
+- **CDJ-1500X:** not tested; compatibility is unknown.
+- Player firmware, mixer/network topology and device-number allocation can all
+  affect interoperability. Test the exact show setup away from production.
+
+The monitor's Virtual CDJ compatibility layer announces a logical player
+identity so compatible equipment can return metadata and waveform data. For
+the current preview release, the operational recommendation is **no more than
+three physical CDJs while the monitor is active**. This is stability guidance,
+not a certified protocol limit.
 
 ## Develop from source
 
