@@ -149,6 +149,17 @@ input {
   font-weight: 900;
 }
 
+.brand-credit {
+  display: block;
+  margin-top: 2px;
+  color: rgba(118, 255, 179, 0.78);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .master-watch {
   min-width: 0;
   display: grid;

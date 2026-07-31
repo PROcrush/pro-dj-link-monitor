@@ -2,7 +2,7 @@
   "name": "pro-dj-link-monitor",
   "version": "1.4.4",
   "private": true,
-  "description": "Unofficial macOS and Windows monitor and VJ bridge for PRO DJ LINK, OSC, WebSocket and LTC workflows.",
+  "description": "Unofficial macOS and Windows monitor and VJ bridge for PRO DJ LINK, OSC, WebSocket and LTC workflows, created by PROcrush.",
   "main": "src/main.cjs",
   "type": "commonjs",
   "scripts": {
@@ -26,7 +26,7 @@
     "djm",
     "electron"
   ],
-  "author": "PROcrush contributors",
+  "author": "PROcrush and contributors",
   "license": "MIT AND EPL-2.0",
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
   "build": {
     "appId": "io.github.procrush.prodjlinkmonitor",
     "productName": "PRO DJ LINK Monitor",
+    "copyright": "Copyright © 2026 PROcrush and contributors",
     "files": [
       "src/main.cjs",
       "src/preload.cjs",
@@ -79,10 +80,13 @@
     "mac": {
       "category": "public.app-category.music",
       "extendInfo": {
-        "NSLocalNetworkUsageDescription": "Discover and monitor DJ devices on your selected local network."
+        "NSLocalNetworkUsageDescription": "Discover and monitor DJ devices on your selected local network.",
+        "NSHumanReadableCopyright": "Copyright © 2026 PROcrush and contributors",
+        "CFBundleGetInfoString": "PRO DJ LINK Monitor by PROcrush"
       }
     },
     "win": {
+      "legalTrademarks": "PROcrush",
       "target": [
         "nsis",
         "portable"

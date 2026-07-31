@@ -13,6 +13,7 @@ const {
 
 const OFFICIAL_BRIDGE_DOWNLOAD_URL = 'https://www.pioneerdj.com/en/product/software-interfaces/pro-dj-link-bridge/';
 const OFFICIAL_BRIDGE_APP_NAME = 'PRO DJ LINK Bridge.app';
+const APP_CREATOR = 'PROcrush';
 
 let mainWindow;
 let monitorShutdownPromise = null;
@@ -25,6 +26,17 @@ function configureMonitorLogging() {
   monitor.setWaveformFailureLogPath(logPath);
 }
 
+function configureAboutPanel() {
+  if (typeof app.setAboutPanelOptions !== 'function') return;
+  app.setAboutPanelOptions({
+    applicationName: 'PRO DJ LINK Monitor',
+    applicationVersion: app.getVersion(),
+    version: app.getVersion(),
+    copyright: `Copyright © 2026 ${APP_CREATOR} and contributors`,
+    credits: `Created by ${APP_CREATOR}\nUnofficial open-source interoperability project.`
+  });
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1240,
@@ -32,7 +44,7 @@ function createWindow() {
     minWidth: 980,
     minHeight: 680,
     backgroundColor: '#111313',
-    title: 'PRO DJ LINK Monitor',
+    title: `PRO DJ LINK Monitor — ${APP_CREATOR}`,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
@@ -65,6 +77,7 @@ if (!gotSingleInstanceLock) {
   });
 
   app.whenReady().then(() => {
+    configureAboutPanel();
     configureMonitorLogging();
     createWindow();
 

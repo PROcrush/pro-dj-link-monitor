@@ -202,6 +202,10 @@ TCNet 和 PRO DJ LINK 捕获可能包含精确时间、私网 IP、设备型号�
 协议互操作研究基于 Deep Symmetry 社区及相关开源项目的公开工作。来源、许可证和署名详见
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
+## 创作者
+
+由 [PROcrush](https://github.com/PROcrush) 创建并维护，欢迎开源社区参与贡献。
+
 ## 许可证
 
 项目原创代码采用 MIT License。单独标识的 `src/prolink/virtualCdj.cjs` 因启动模板和逻辑

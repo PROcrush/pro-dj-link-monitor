@@ -6,13 +6,7 @@ Versioning where practical.
 
 ## [Unreleased]
 
-### Documentation
-
-- Added complete English and Simplified Chinese README entry points.
-- Documented that CDJ-3000X and CDJ-1500X are untested with unknown
-  compatibility. Documented a strict three-player maximum for models earlier
-  than CDJ-3000 and a five-player maximum for CDJ-3000 and later generations
-  while the Virtual CDJ compatibility layer is active.
+No changes yet.
 
 ## [1.4.4] - 2026-08-01
 
@@ -22,6 +16,16 @@ Versioning where practical.
 - Cross-platform CI for the Node.js test suite.
 - Unsigned preview packages for macOS Apple Silicon and Windows x64, with
   SHA-256 checksums.
+
+### Documentation
+
+- Added complete English and Simplified Chinese README entry points.
+- Documented that CDJ-3000X and CDJ-1500X are untested with unknown
+  compatibility. Documented a strict three-player maximum for models earlier
+  than CDJ-3000 and a five-player maximum for CDJ-3000 and later generations
+  while the Virtual CDJ compatibility layer is active.
+- Added PROcrush creator attribution to the repository, visible application UI,
+  About panel, package metadata and license notice.
 
 ### Security
 

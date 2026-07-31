@@ -232,6 +232,11 @@ community and related open-source projects. See
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for source, license and
 attribution details.
 
+## Creator
+
+Created and maintained by [PROcrush](https://github.com/PROcrush), with
+contributions welcomed from the open-source community.
+
 ## License
 
 Original project code is available under the MIT License. The separately
