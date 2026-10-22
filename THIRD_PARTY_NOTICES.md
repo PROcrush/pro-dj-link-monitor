@@ -26,9 +26,9 @@ packet formats are cited for interoperability; no endorsement is implied.
 
 The direct dependencies used by version 1.4.4 are:
 
-- Electron 42.5.1 — MIT
+- Electron 43.8.3 — MIT
 - electron-builder 26.15.3 — MIT
-- ws 8.21.0 — MIT
+- ws 8.22.0 — MIT
 
 Transitive dependency names, versions and license metadata are recorded in
 `package-lock.json`. Packaged Electron applications also carry Electron and

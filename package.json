@@ -41,7 +41,7 @@
   },
   "packageManager": "npm@11.9.0",
   "devDependencies": {
-    "electron": "^42.5.1",
+    "electron": "^43.8.3",
     "electron-builder": "^26.15.3"
   },
   "build": {

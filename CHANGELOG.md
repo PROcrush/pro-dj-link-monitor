@@ -6,7 +6,10 @@ Versioning where practical.
 
 ## [Unreleased]
 
-No changes yet.
+### Changed
+
+- Updated `ws` from 8.21.0 to 8.22.0.
+- Updated Electron from 42.5.1 to 43.8.3. No application code changes were required.
 
 ## [1.4.4] - 2026-08-01
 
