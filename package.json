@@ -41,8 +41,8 @@
   },
   "packageManager": "npm@11.9.0",
   "devDependencies": {
-    "electron": "^43.8.3",
-    "electron-builder": "^26.15.3"
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
   },
   "build": {
     "appId": "io.github.procrush.prodjlinkmonitor",
